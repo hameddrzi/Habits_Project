@@ -9,6 +9,7 @@ import AnimationPicker from "./src/component/screens/AnimationPicker.js";
 import HomeScreen from "./src/component/screens/HomeScreen.js";
 import ToDoScreen from "./src/component/screens/ToDoScreen.js";
 import EditActivityScreen from "./src/component/screens/EditActivityScreen.js"; // ⬅️ این رو جا انداخته بودی
+import CreateActivity from "./src/component/screens/CreateActivity.js";
 import { TasksProvider } from "./src/state/TasksContext.js";
 
 const Stack = createNativeStackNavigator();
@@ -32,6 +33,7 @@ export default function App() {
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="ToDo" component={ToDoScreen} />
             <Stack.Screen name="EditActivity" component={EditActivityScreen} />
+            <Stack.Screen name="CreateActivity" component={CreateActivity} />
             <Stack.Screen name="AnimationPicker" component={AnimationPicker} />
           </Stack.Navigator>
         </SafeAreaView>

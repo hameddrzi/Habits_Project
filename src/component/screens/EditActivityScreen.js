@@ -5,10 +5,12 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { COLORS, SPACING } from "../../theme";
 import { useTasks } from "../../state/TasksContext";
+import LottieView from "lottie-react-native";
+import { ANIMATIONS } from "../../assets/animations";
 
 export default function EditActivityScreen() {
   const navigation = useNavigation();
-  const { tasks, addTask, renameTask, deleteTask, setStatus, note, setNote } = useTasks();
+  const { tasks, addTask, renameTask, deleteTask, setStatus, note, setNote, animId } = useTasks();
 
   const [localNote, setLocalNote] = useState(note);
   const [drafts, setDrafts] = useState(
@@ -73,11 +75,6 @@ export default function EditActivityScreen() {
             <TouchableOpacity onPress={() => setStatus(tasks[idx]?.id, "done")}>
               <Text style={styles.smallBtn}>✔</Text>
             </TouchableOpacity>
-            
-            <TouchableOpacity onPress={() => navigation.navigate("AnimationPicker")}>
-  <Text style={styles.link}>🗂 Gif</Text>
-</TouchableOpacity>
-
             <TouchableOpacity onPress={() => setStatus(tasks[idx]?.id, "skipped")}>
               <Text style={styles.smallBtn}>⏭</Text>
             </TouchableOpacity>
@@ -99,14 +96,31 @@ export default function EditActivityScreen() {
 
         <View style={styles.sectionDivider} />
 
-        {/* Change Photo (placeholder) */}
+        {/* Change Photo (show selected animation) */}
         <Text style={styles.sectionLabel}>Change Photo:</Text>
-        <View style={[styles.box, { height: 180, justifyContent: "center", alignItems: "center" }]}>
-          <Text style={{ fontFamily: "RobotoMono", color: COLORS.sub }}>LottieFile</Text>
+        <View style={[styles.box, { height: 180, justifyContent: "center", alignItems: "center", overflow: "hidden" }]}>
+          {(() => {
+            const selected = ANIMATIONS.find(a => a.id === animId);
+            if (!selected) {
+              return <Text style={{ fontFamily: "RobotoMono", color: COLORS.sub }}>LottieFile</Text>;
+            }
+            return (
+              <LottieView
+                autoPlay
+                loop
+                style={{ width: "100%", height: "100%" }}
+                source={selected.src}
+              />
+            );
+          })()}
         </View>
         <View style={{ flexDirection: "row", gap: 12, paddingHorizontal: 16, marginTop: 8 }}>
-          <TouchableOpacity style={styles.ghostBtn}><Text style={styles.ghostText}>From Device</Text></TouchableOpacity>
-          <TouchableOpacity style={styles.ghostBtn}><Text style={styles.ghostText}>Gif</Text></TouchableOpacity>
+          <TouchableOpacity style={styles.ghostBtn}>
+            <Text style={styles.ghostText}>From Device</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.ghostBtn} onPress={() => navigation.navigate("AnimationPicker")}>
+            <Text style={styles.ghostText}>Gif</Text>
+          </TouchableOpacity>
         </View>
 
         {/* Save button */}

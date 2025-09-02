@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import LottieView from "lottie-react-native";
-import Svg, { Line, Path, Rect } from "react-native-svg";
+import Svg, { Line, Path, Rect, Text as SvgText } from "react-native-svg";
 
 import { COLORS, SPACING } from "../../theme.js";
 import BottomNav from "../BottomNav";
@@ -114,9 +114,7 @@ export default function ToDoScreen() {
         <View style={styles.sectionDivider} />
 
         {/* Progress section */}
-        <Text style={[styles.sectionTitle, { marginBottom: 8 }]}>
-          Your progress:
-        </Text>
+        <Text style={[styles.sectionTitle, { marginBottom: 8 }]}>Your progress:</Text>
         <ProgressCard tasks={tasks} />
       </ScrollView>
 
@@ -205,6 +203,10 @@ function ProgressCard({ tasks = [] }) {
   const pinkPath = buildSmoothPath(toPoints(pv));
   const bluePath = buildSmoothPath(toPoints(bv));
 
+  const doneCount = tasks.filter(t => t.status === "done").length;
+  const skippedCount = tasks.filter(t => t.status === "skipped").length;
+  const todoCount = total - doneCount - skippedCount;
+
   return (
     <View style={{ alignItems: "center" }}>
       <Svg width={w} height={h}>
@@ -234,6 +236,13 @@ function ProgressCard({ tasks = [] }) {
 
         <Path d={bluePath} stroke={COLORS.ink} strokeWidth={4} fill="none" />
         <Path d={pinkPath} stroke={COLORS.primary} strokeWidth={4} fill="none" />
+
+        {/* Legend */}
+        <Rect x={w - 135} y={10} width={125} height={20} rx={6} ry={6} stroke={COLORS.ink} strokeWidth={2} fill="#fff" />
+        <Path d={`M${w - 128} 20 h18`} stroke={COLORS.primary} strokeWidth={4} />
+        <SvgText x={w - 108} y={24} fill={COLORS.ink} fontSize={12} fontFamily="RobotoMono">done: {doneCount}</SvgText>
+        <Path d={`M${w - 58} 20 h18`} stroke={COLORS.ink} strokeWidth={4} />
+        <SvgText x={w - 38} y={24} fill={COLORS.ink} fontSize={12} fontFamily="RobotoMono">rest: {todoCount + skippedCount}</SvgText>
       </Svg>
     </View>
   );

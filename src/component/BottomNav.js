@@ -29,7 +29,7 @@ export default function BottomNav() {
     <View style={styles.nav}>
       <NavIcon label="Home" onPress={() => navigation.navigate("Home")} />
       <NavIcon label="Calendar" onPress={() => navigation.navigate("ToDo")} />
-      <NavIcon label="+" isBig onPress={() => {}} />
+      <NavIcon label="+" isBig onPress={() => navigation.navigate("CreateActivity")} />
       <NavIcon label="Activity" />
       <NavIcon label="Settings" />
     </View>
